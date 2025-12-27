@@ -2,6 +2,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import Header from './components/Header';
 import MathRenderer from './components/MathRenderer';
+import ImageCropper from './components/ImageCropper';
 import { TaskMode } from './types';
 import { analyzeMathImage } from './services/geminiService';
 import { 
@@ -17,12 +18,15 @@ import {
   MessageSquarePlus,
   Calculator,
   BookOpen,
-  ChevronRight
+  ChevronRight,
+  Crop
 } from 'lucide-react';
 
 const App: React.FC = () => {
   const [mode, setMode] = useState<TaskMode>(TaskMode.STEP_CORRECTION);
   const [image, setImage] = useState<string | null>(null);
+  const [tempImage, setTempImage] = useState<string | null>(null);
+  const [isCropping, setIsCropping] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [prompt, setPrompt] = useState("");
@@ -34,11 +38,23 @@ const App: React.FC = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result as string);
+        setTempImage(reader.result as string);
+        setIsCropping(true);
         setResult(null);
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleCropComplete = (croppedImage: string) => {
+    setImage(croppedImage);
+    setIsCropping(false);
+    setTempImage(null);
+  };
+
+  const handleCropCancel = () => {
+    setIsCropping(false);
+    setTempImage(null);
   };
 
   const triggerUpload = () => fileInputRef.current?.click();
@@ -76,6 +92,14 @@ const App: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-slate-50">
       <Header />
       
+      {isCropping && tempImage && (
+        <ImageCropper 
+          image={tempImage} 
+          onCropComplete={handleCropComplete} 
+          onCancel={handleCropCancel} 
+        />
+      )}
+      
       <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-4 sm:py-8 space-y-6">
         {/* Mode Selector - Improved for touch */}
         <div className="flex p-1 bg-slate-200/60 rounded-2xl backdrop-blur-sm overflow-x-auto no-scrollbar">
@@ -111,12 +135,25 @@ const App: React.FC = () => {
                 <>
                   <img src={image} alt="Math Input" className="w-full h-full object-contain p-2" />
                   <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-                  <button 
-                    onClick={clearImage}
-                    className="absolute top-4 right-4 bg-white/90 p-2.5 rounded-2xl shadow-xl hover:bg-red-50 text-red-500 transition-all active:scale-90"
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </button>
+                  <div className="absolute top-4 right-4 flex flex-col space-y-2">
+                    <button 
+                      onClick={clearImage}
+                      className="bg-white/90 p-2.5 rounded-2xl shadow-xl hover:bg-red-50 text-red-500 transition-all active:scale-90"
+                      title="清除图片"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                    <button 
+                      onClick={() => {
+                        setTempImage(image);
+                        setIsCropping(true);
+                      }}
+                      className="bg-white/90 p-2.5 rounded-2xl shadow-xl hover:bg-indigo-50 text-indigo-600 transition-all active:scale-90"
+                      title="重新裁剪"
+                    >
+                      <Crop className="w-5 h-5" />
+                    </button>
+                  </div>
                 </>
               ) : (
                 <div className="text-center p-6 space-y-4">
