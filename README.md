@@ -26,3 +26,29 @@ Math Mentor Pro 是一款专为中学数学教育设计的 AI 辅助工具。它
 ### 2.2 提示词建议
 - **批改时**：尽量拍摄清晰的卷面，光线均匀。
 - **几何时**：确保图形标注（A, B, C 等字母）在图片范围内。
+
+## 3. 部署与技术栈
+
+### 3.1 移动端与 PWA
+本项目已适配移动端浏览器（H5），并支持 PWA 迭代：
+- **响应式布局**：基于 Tailwind CSS 适配各种屏幕尺寸。
+- **PWA 支持**：支持“添加到主屏幕”，离线缓存基础资源，体验接近原生 App。
+- **触摸优化**：优化了按钮点击态和滚动体验。
+
+### 3.2 Cloudflare Pages 部署
+本项目非常适合部署在 Cloudflare Pages 上：
+1. **连接仓库**：在 Cloudflare Dashboard 中选择 "Pages" -> "Connect to Git"。
+2. **构建设置**：
+   - 框架预设：`Vite`
+   - 构建命令：`npm run build`
+   - 输出目录：`dist`
+3. **环境变量**：
+   - 在 "Settings" -> "Environment variables" 中添加 `GEMINI_API_KEY`，值为您的 Google AI API Key。
+4. **自定义域名**：支持绑定您的个人域名，并自动开启 HTTPS。
+
+### 3.3 技术架构
+- **前端**：React 19 + TypeScript + Vite
+- **UI**：Tailwind CSS + Lucide React
+- **渲染**：React Markdown + KaTeX (支持数学公式完美展示)
+- **AI**：Google Gemini 3 Pro (通过 `@google/genai` SDK)
+- **部署**：Cloudflare Pages / PWA
