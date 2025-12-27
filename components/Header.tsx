@@ -7,8 +7,8 @@ const Header: React.FC = () => {
     <header className="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         <div className="flex items-center space-x-3 group cursor-default">
-          <div className="bg-gradient-to-tr from-indigo-600 to-indigo-400 p-2 rounded-2xl shadow-lg shadow-indigo-100 group-hover:scale-110 transition-transform duration-300">
-            <img src="https://pub-c98d5902eedf42f6a9765dfad981fd88.r2.dev/Icon/math_mentor192x192.png" alt="数学易" className="w-6 h-6 object-contain" />
+          <div className="group-hover:scale-110 transition-transform duration-300">
+            <img src="https://pub-c98d5902eedf42f6a9765dfad981fd88.r2.dev/Icon/math_mentor192x192.png" alt="数学易" className="w-10 h-10 object-contain rounded-xl" />
           </div>
           <div>
             <h1 className="text-lg font-black text-slate-900 tracking-tighter leading-none">数学易</h1>
