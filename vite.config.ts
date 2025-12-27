@@ -14,25 +14,25 @@ export default defineConfig(({ mode }) => {
         react(),
         VitePWA({
           registerType: 'autoUpdate',
-          includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+          includeAssets: ['favicon.ico', 'robots.txt'],
           manifest: {
-            name: 'Math Mentor Pro',
-            short_name: 'MathMentor',
+            name: '数学易',
+            short_name: '数学易',
             description: '智能数学助手 - 解决您的数学难题',
             theme_color: '#4f46e5',
             icons: [
               {
-                src: 'pwa-192x192.png',
+                src: 'https://pub-c98d5902eedf42f6a9765dfad981fd88.r2.dev/Icon/math_mentor192x192.png',
                 sizes: '192x192',
                 type: 'image/png'
               },
               {
-                src: 'pwa-512x512.png',
+                src: 'https://pub-c98d5902eedf42f6a9765dfad981fd88.r2.dev/Icon/math_mentor192x192.png',
                 sizes: '512x512',
                 type: 'image/png'
               },
               {
-                src: 'pwa-512x512.png',
+                src: 'https://pub-c98d5902eedf42f6a9765dfad981fd88.r2.dev/Icon/math_mentor192x192.png',
                 sizes: '512x512',
                 type: 'image/png',
                 purpose: 'any maskable'
