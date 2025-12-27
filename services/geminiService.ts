@@ -1,5 +1,4 @@
 
-import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { TaskMode } from "../types";
 
 const SYSTEM_INSTRUCTION = `你是一位拥有深厚数学底蕴的“中学数学特级教师”和“智能辅助教学专家”。你精通代数、几何、三角函数及微积分，擅长通过视觉分析识别复杂的数学公式、手写步骤和几何图形。
@@ -29,9 +28,6 @@ export const analyzeMathImage = async (
   mode: TaskMode,
   userPrompt?: string
 ): Promise<string> => {
-  // Use correct initialization as per guidelines: new GoogleGenAI({ apiKey: process.env.API_KEY })
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  
   let modePrompt = "";
   switch (mode) {
     case TaskMode.STEP_CORRECTION:
@@ -46,29 +42,31 @@ export const analyzeMathImage = async (
   }
 
   const prompt = userPrompt ? `${modePrompt}\n用户额外补充：${userPrompt}` : modePrompt;
-
-  const imagePart = {
-    inlineData: {
-      mimeType: "image/jpeg",
-      data: base64Image.split(',')[1],
-    },
-  };
+  const imageData = base64Image.includes(',') ? base64Image.split(',')[1] : base64Image;
 
   try {
-    const response: GenerateContentResponse = await ai.models.generateContent({
-      // Use 'gemini-3-pro-preview' for complex math reasoning tasks
-      model: "gemini-3-pro-preview",
-      contents: { parts: [imagePart, { text: prompt }] },
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
-        temperature: 0.1, // High precision for math
+    const response = await fetch("/api/analyze", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        image: imageData,
+        mode,
+        prompt,
+        systemInstruction: SYSTEM_INSTRUCTION
+      }),
     });
 
-    // Access text property directly
-    return response.text || "未能生成分析结果，请稍后再试。";
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "服务器响应错误");
+    }
+
+    const data = await response.json();
+    return data.text || "未能生成分析结果，请稍后再试。";
   } catch (error: any) {
-    console.error("Gemini API Error:", error);
+    console.error("Analysis Error:", error);
     throw new Error(error.message || "分析过程中发生错误");
   }
 };
