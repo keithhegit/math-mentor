@@ -11,7 +11,7 @@ export const onRequestPost = async (context) => {
   }
 
   try {
-    const { image, mode, prompt, systemInstruction } = await context.request.json();
+    const { image, prompt, systemInstruction } = await context.request.json();
 
     const googleApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${GEMINI_API_KEY}`;
 
@@ -31,7 +31,7 @@ export const onRequestPost = async (context) => {
                 },
               },
               {
-                text: prompt,
+                text: prompt || "请分析这张数学题目图片，并给出详细解答。",
               },
             ],
           },

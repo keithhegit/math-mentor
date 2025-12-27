@@ -23,7 +23,6 @@ import {
 } from 'lucide-react';
 
 const App: React.FC = () => {
-  const [mode, setMode] = useState<TaskMode>(TaskMode.STEP_CORRECTION);
   const [image, setImage] = useState<string | null>(null);
   const [tempImage, setTempImage] = useState<string | null>(null);
   const [isCropping, setIsCropping] = useState(false);
@@ -65,7 +64,7 @@ const App: React.FC = () => {
     setAnalyzing(true);
     setResult(null);
     try {
-      const output = await analyzeMathImage(image, mode, prompt);
+      const output = await analyzeMathImage(image, prompt);
       setResult(output);
       // 移动端自动滚动到结果区
       if (window.innerWidth < 1024) {
@@ -101,28 +100,6 @@ const App: React.FC = () => {
       )}
       
       <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-4 sm:py-8 space-y-6">
-        {/* Mode Selector - Improved for touch */}
-        <div className="flex p-1 bg-slate-200/60 rounded-2xl backdrop-blur-sm overflow-x-auto no-scrollbar">
-          {[
-            { id: TaskMode.STEP_CORRECTION, label: '解题批改', icon: CheckCircle2 },
-            { id: TaskMode.GEOMETRY_ANALYSIS, label: '几何分析', icon: Triangle },
-            { id: TaskMode.PROBLEM_VARIATION, label: '试题变式', icon: Sparkles },
-          ].map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setMode(item.id)}
-              className={`flex-1 flex items-center justify-center py-2.5 px-3 rounded-xl transition-all whitespace-nowrap ${
-                mode === item.id 
-                  ? 'bg-white text-indigo-600 shadow-md scale-100 font-bold' 
-                  : 'text-slate-500 hover:text-slate-700'
-              }`}
-            >
-              <item.icon className={`w-4 h-4 mr-2 ${mode === item.id ? 'text-indigo-600' : 'text-slate-400'}`} />
-              <span className="text-sm">{item.label}</span>
-            </button>
-          ))}
-        </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           {/* Left Column: Image Area */}
           <div className="space-y-4">
@@ -302,13 +279,8 @@ const App: React.FC = () => {
       </main>
 
       <footer className="bg-white border-t border-slate-100 py-8 px-4">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between text-slate-400 text-[10px] uppercase tracking-widest font-bold">
-          <p>© 2024 MATH MENTOR PRO · ALL RIGHTS RESERVED</p>
-          <div className="flex items-center space-x-4 mt-4 sm:mt-0">
-            <span>Powered by Gemini 3 Pro</span>
-            <span className="w-1 h-1 bg-slate-200 rounded-full" />
-            <span>特级教师学术支持</span>
-          </div>
+        <div className="max-w-6xl mx-auto flex flex-col items-center justify-center text-slate-400 text-[10px] uppercase tracking-widest font-bold">
+          <p>2025 KEITH HE 数学易 ALL RIGHTS RESERVED</p>
         </div>
       </footer>
     </div>
