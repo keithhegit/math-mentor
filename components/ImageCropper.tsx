@@ -43,7 +43,18 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ image, onCropComplete, onCa
   const handleDone = async () => {
     if (completedCrop && imgRef.current) {
       try {
-        const croppedImage = await getCroppedImg(image, completedCrop);
+        const imageElement = imgRef.current;
+        const scaleX = imageElement.naturalWidth / imageElement.width;
+        const scaleY = imageElement.naturalHeight / imageElement.height;
+
+        const pixelCrop = {
+          x: completedCrop.x * scaleX,
+          y: completedCrop.y * scaleY,
+          width: completedCrop.width * scaleX,
+          height: completedCrop.height * scaleY,
+        };
+
+        const croppedImage = await getCroppedImg(image, pixelCrop);
         onCropComplete(croppedImage);
       } catch (e) {
         console.error(e);
