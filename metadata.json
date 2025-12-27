@@ -1,0 +1,7 @@
+{
+  "name": "Math Mentor Pro - 智能数学助手",
+  "description": "一位拥有深厚数学底蕴的智能助手，精通代数批改、几何视觉分析及试题变式生成，专为中学数学教师和学生设计。",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
